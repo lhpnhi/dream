@@ -499,7 +499,7 @@ class AttentiveTransformer(torch.nn.Module):
 
         #if mask_type == "sparsemax":
             # Sparsemax
-        self.selector = sparsemax.Sparsemax(dim=-1)
+        self.selector = Sparsemax(dim=-1)
         #elif mask_type == "entmax":
             # Entmax
         #    self.selector = sparsemax.Entmax15(dim=-1)
