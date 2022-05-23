@@ -58,12 +58,12 @@ class TabModel(BaseEstimator):
     optimizer_params: Dict = field(default_factory=lambda: dict(lr=2e-2))
     scheduler_fn: Any = None
     scheduler_params: Dict = field(default_factory=dict)
-    mask_type: str = "sparsemax"
+    #mask_type: str = "sparsemax"
     input_dim: int = None
     output_dim: int = None
     device_name: str = "auto"
-    n_shared_decoder: int = 1
-    n_indep_decoder: int = 1
+    #n_shared_decoder: int = 1
+    #n_indep_decoder: int = 1
 
     def __post_init__(self):
         self.batch_size = 1024
@@ -89,7 +89,7 @@ class TabModel(BaseEstimator):
             "cat_emb_dim",
             "cat_idxs",
             "input_dim",
-            "mask_type",
+            #"mask_type",
             "n_a",
             "n_d",
             "n_independent",
@@ -582,7 +582,7 @@ class TabModel(BaseEstimator):
             epsilon=self.epsilon,
             virtual_batch_size=self.virtual_batch_size,
             momentum=self.momentum,
-            mask_type=self.mask_type,
+            #mask_type=self.mask_type,
         ).to(self.device)
 
         self.reducing_matrix = create_explain_matrix(
