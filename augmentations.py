@@ -1,5 +1,5 @@
 import torch
-from pytorch_tabnet.utils import define_device
+from utils import define_device
 import numpy as np
 
 
