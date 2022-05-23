@@ -124,9 +124,9 @@ class TabModel(BaseEstimator):
         drop_last=True,
         callbacks=None,
         pin_memory=True,
-        from_unsupervised=None,
+        #from_unsupervised=None,
         warm_start=False,
-        augmentations=None,
+        #augmentations=None,
     ):
         """Train a neural network stored in self.network
         Using train_dataloader for training data and
@@ -184,11 +184,11 @@ class TabModel(BaseEstimator):
         self.input_dim = X_train.shape[1]
         self._stop_training = False
         self.pin_memory = pin_memory and (self.device.type != "cpu")
-        self.augmentations = augmentations
+        #self.augmentations = augmentations
 
-        if self.augmentations is not None:
+        #if self.augmentations is not None:
             # This ensure reproducibility
-            self.augmentations._set_seed()
+        #    self.augmentations._set_seed()
 
         eval_set = eval_set if eval_set else []
 
@@ -198,7 +198,7 @@ class TabModel(BaseEstimator):
             self.loss_fn = loss_fn
 
         check_input(X_train)
-        check_warm_start(warm_start, from_unsupervised)
+        #check_warm_start(warm_start, from_unsupervised)
 
         self.update_fit_params(
             X_train,
@@ -214,9 +214,9 @@ class TabModel(BaseEstimator):
             X_train, y_train, eval_set
         )
 
-        if from_unsupervised is not None:
+        #if from_unsupervised is not None:
             # Update parameters to match self pretraining
-            self.__update__(**from_unsupervised.get_params())
+        #    self.__update__(**from_unsupervised.get_params())
 
         if not hasattr(self, "network") or not warm_start:
             # model has never been fitted before of warm_start is False
@@ -226,9 +226,9 @@ class TabModel(BaseEstimator):
         self._set_optimizer()
         self._set_callbacks(callbacks)
 
-        if from_unsupervised is not None:
-            self.load_weights_from_unsupervised(from_unsupervised)
-            warnings.warn("Loading weights from unsupervised pretraining")
+        #if from_unsupervised is not None:
+        #    self.load_weights_from_unsupervised(from_unsupervised)
+        #    warnings.warn("Loading weights from unsupervised pretraining")
         # Call method on_train_begin for all callbacks
         self._callback_container.on_train_begin()
 
@@ -343,19 +343,19 @@ class TabModel(BaseEstimator):
 
         return res_explain, res_masks
 
-    def load_weights_from_unsupervised(self, unsupervised_model):
-        update_state_dict = copy.deepcopy(self.network.state_dict())
-        for param, weights in unsupervised_model.network.state_dict().items():
-            if param.startswith("encoder"):
-                # Convert encoder's layers name to match
-                new_param = "tabnet." + param
-            else:
-                new_param = param
-            if self.network.state_dict().get(new_param) is not None:
-                # update only common layers
-                update_state_dict[new_param] = weights
-
-        self.network.load_state_dict(update_state_dict)
+    #def load_weights_from_unsupervised(self, unsupervised_model):
+    #    update_state_dict = copy.deepcopy(self.network.state_dict())
+    #    for param, weights in unsupervised_model.network.state_dict().items():
+    #        if param.startswith("encoder"):
+    #            # Convert encoder's layers name to match
+    #            new_param = "tabnet." + param
+    #        else:
+    #            new_param = param
+    #        if self.network.state_dict().get(new_param) is not None:
+    #            # update only common layers
+    #            update_state_dict[new_param] = weights
+#
+#        self.network.load_state_dict(update_state_dict)
 
     def load_class_attrs(self, class_attrs):
         for attr_name, attr_value in class_attrs.items():
