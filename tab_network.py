@@ -97,7 +97,7 @@ class TabNetEncoder(torch.nn.Module):
         self.n_independent = n_independent
         self.n_shared = n_shared
         self.virtual_batch_size = virtual_batch_size
-        self.mask_type = mask_type
+        #self.mask_type = mask_type
         self.initial_bn = BatchNorm1d(self.input_dim, momentum=0.01)
 
         if self.n_shared > 0:
@@ -141,7 +141,7 @@ class TabNetEncoder(torch.nn.Module):
                 self.input_dim,
                 virtual_batch_size=self.virtual_batch_size,
                 momentum=momentum,
-                mask_type=self.mask_type,
+                #mask_type=self.mask_type,
             )
             self.feat_transformers.append(transformer)
             self.att_transformers.append(attention)
@@ -213,7 +213,7 @@ class TabNetNoEmbeddings(torch.nn.Module):
         epsilon=1e-15,
         virtual_batch_size=128,
         momentum=0.02,
-        mask_type="sparsemax",
+        #mask_type="sparsemax",
     ):
         """
         Defines main part of the TabNet network without the embedding layers.
@@ -258,7 +258,7 @@ class TabNetNoEmbeddings(torch.nn.Module):
         self.n_independent = n_independent
         self.n_shared = n_shared
         self.virtual_batch_size = virtual_batch_size
-        self.mask_type = mask_type
+        #self.mask_type = mask_type
         self.initial_bn = BatchNorm1d(self.input_dim, momentum=0.01)
 
         self.encoder = TabNetEncoder(
@@ -273,7 +273,7 @@ class TabNetNoEmbeddings(torch.nn.Module):
             epsilon=epsilon,
             virtual_batch_size=virtual_batch_size,
             momentum=momentum,
-            mask_type=mask_type,
+            #mask_type=mask_type,
         )
 
         if self.is_multi_task:
@@ -321,7 +321,7 @@ class TabNet(torch.nn.Module):
         epsilon=1e-15,
         virtual_batch_size=128,
         momentum=0.02,
-        mask_type="sparsemax",
+        #mask_type="sparsemax",
     ):
         """
         Defines TabNet network
@@ -376,7 +376,7 @@ class TabNet(torch.nn.Module):
         self.epsilon = epsilon
         self.n_independent = n_independent
         self.n_shared = n_shared
-        self.mask_type = mask_type
+        #self.mask_type = mask_type
 
         if self.n_steps <= 0:
             raise ValueError("n_steps should be a positive integer.")
@@ -398,7 +398,7 @@ class TabNet(torch.nn.Module):
             epsilon,
             virtual_batch_size,
             momentum,
-            mask_type,
+            #mask_type,
         )
 
     def forward(self, x):
@@ -417,7 +417,7 @@ class AttentiveTransformer(torch.nn.Module):
         output_dim,
         virtual_batch_size=128,
         momentum=0.02,
-        mask_type="sparsemax",
+        #mask_type="sparsemax",
     ):
         """
         Initialize an attention transformer.
@@ -442,16 +442,16 @@ class AttentiveTransformer(torch.nn.Module):
             output_dim, virtual_batch_size=virtual_batch_size, momentum=momentum
         )
 
-        if mask_type == "sparsemax":
+        #if mask_type == "sparsemax":
             # Sparsemax
-            self.selector = sparsemax.Sparsemax(dim=-1)
-        elif mask_type == "entmax":
+        self.selector = sparsemax.Sparsemax(dim=-1)
+        #elif mask_type == "entmax":
             # Entmax
-            self.selector = sparsemax.Entmax15(dim=-1)
-        else:
-            raise NotImplementedError(
-                "Please choose either sparsemax" + "or entmax as masktype"
-            )
+        #    self.selector = sparsemax.Entmax15(dim=-1)
+        #else:
+        #    raise NotImplementedError(
+        #        "Please choose either sparsemax" + "or entmax as masktype"
+        #    )
 
     def forward(self, priors, processed_feat):
         x = self.fc(processed_feat)
