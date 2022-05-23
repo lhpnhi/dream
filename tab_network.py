@@ -21,7 +21,7 @@ def initialize_glu(module, input_dim, output_dim):
 
 def make_ix_like(input, dim = 0):
     d = input.size(dim)
-    rho = torch.arrange(1, d + 1, device = input.device, dtype = input.dtype)
+    rho = torch.arange(1, d + 1, device = input.device, dtype = input.dtype)
     view = [1] * input.dim()
     view[0] = -1
     return rho.view(view).transpose(0, dim)
