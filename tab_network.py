@@ -70,7 +70,7 @@ class Sparsemax(torch.nn.Module):
 
 class GBN(torch.nn.Module):
     def __init__(self, input_dim, virtual_batch_size = 128, momentum = 0.01):
-        super().__init__()
+        super(GBN, self).__init__()
 
         self.input_dim = input_dim
         self.virtual_batch_size = virtual_batch_size
@@ -89,7 +89,7 @@ class GLU_Layer(torch.nn.Module):
     def __init__(
         self, input_dim, output_dim, fc = None, virtual_batch_size = 128, momentum=0.02
     ):
-        super().__init__()
+        super(GLU_Layer, self).__init__()
 
         self.output_dim = output_dim
         if fc:
