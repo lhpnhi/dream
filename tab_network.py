@@ -77,13 +77,13 @@ class GBN(torch.nn.Module):
         self.bn = BatchNorm1d(self.input_dim, momentum = momentum)
 
     def foward(self, x):
-        if x.shape[0] <= self.virtual_batch_size: #Kích thước lô ảo lớn hơn lô đầu vào nên không thỏa điều kiện để sử dụng GBN
-            return self.bn(x)
-        else:
-            chunks = x.chunk(int(np.ceil(x.shape[0] / self.virtual_batch_size)), 0) #Chia lô đầu vào thành các lô nhỏ (lô ảo)
-            res = [self.bn(y) for y in chunks] #áp dụng batch normalization cho từng lô ảo
+        #if x.shape[0] <= self.virtual_batch_size: #Kích thước lô ảo lớn hơn lô đầu vào nên không thỏa điều kiện để sử dụng GBN
+        #    return self.bn(x)
+        #else:
+        chunks = x.chunk(int(np.ceil(x.shape[0] / self.virtual_batch_size)), 0) #Chia lô đầu vào thành các lô nhỏ (lô ảo)
+        res = [self.bn(y) for y in chunks] #áp dụng batch normalization cho từng lô ảo
 
-            return torch.cat(res, dim = 0)
+        return torch.cat(res, dim = 0)
 
 class GLU_Layer(torch.nn.Module):
     def __init__(
